@@ -1,0 +1,3 @@
+[submodule "gf180mcu-pdk"]
+	path = code_generation_tools/gf180mcu-pdk
+	url = https://github.com/google/gf180mcu-pdk/
