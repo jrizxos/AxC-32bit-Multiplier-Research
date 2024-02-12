@@ -1,7 +1,6 @@
 import os
 import time
 import random
-random.seed(42)
 import traceback
 from math import inf
 from math import sqrt
@@ -13,11 +12,13 @@ from individual import individual, VAR_N, VAR_D, BIT_W, get_binary
 from tcl_helper import create_files, build_rtl, run_tcl, get_scores
 from score_tree import evaluated_individual, place_individual, store_tree, load_tree, find_individual, store_raw, load_raw
 
+# Parameters:
 POP_N = 100                         # number of individuals in population
 BST_N = 20                          # number of best individuals to select
 CLD_N = POP_N                       # number of children to make
 GEN_N = 100                         # max number of generations allowed
 MUT_P = 0.07                        # probability of mutation
+random.seed(42)
 
 MAX_PROC = 3                        # max number of processes to run, keep in mind your tool might not allow too
                                     # many process instances to run at the same time, you want this muber to
@@ -28,6 +29,10 @@ PROC_TIM = 400                      # max seconds to wait for a process, remembe
                                     # cause this program to crash because it can't distinguish between it's
                                     # children running slow or having gotten stuck
 
+TCL_DEBUG = False                   # set to true if you want TCL script output
+EVL_DEBUG = False                   # set to true if you want evolution debug output
+
+# Constants:
 EXACT = {'mae': 0, 'area':183837.024, 'time':0, 'power':3.4414100000000003}
 MAE_LIM  = [EXACT['mae'], 4612257093580112277]     # crowding distance MAE limits   [min: exact, max: utilities.worst_case_MAE()]
 AREA_LIM = [   19135.559,       EXACT['area']]     # crowding distance area limits  [min:  min1, max:                      exact]
@@ -39,9 +44,7 @@ objectives = {'mae':MAE_LIM[1]-MAE_LIM[0],         # crowding distance objective
               'power':POW_LIM[1]-POW_LIM[0]}
 UNITS = {'mae': '', 'area':'μm^2', 'time':'ps', 'power':'mW'}
 
-TCL_DEBUG = False                   # set to true if you want TCL script output
-EVL_DEBUG = False                   # set to true if you want evolution debug output
-
+# Globals:
 score_proc = []
 combines_num = mutates_num = 0
 
@@ -515,21 +518,21 @@ def print_population(population:List[individual]):
     print()
     return
 
-def search(restore_paretro=None):
+def search(restore_pareto=None):
     """Searches the search space using NSGA-II.
 
         Args:
-            restore_paretro (str): name of the json file containing a paretro front to use as initial population
+            restore_pareto (str): name of the json file containing a pareto front to use as initial population
 
         Returns:
-            population (list of individual): paretro front of nondominated solutions
+            population (list of individual): pareto front of nondominated solutions
     """
     global TREE_ROOT, EVL_DEBUG, MUT_P, GEN_N, POP_N
 
     ######################### INTIAL POPULATION #########################
     print('Creating initial population...')
-    if(restore_paretro!=None):                                                  # restore from paretro
-        population = load_raw(FILE=restore_paretro)
+    if(restore_pareto!=None):                                                  # restore from pareto
+        population = load_raw(FILE=restore_pareto)
         if(len(population)<POP_N):                                              # if it has less individuals than needed
             population += create_init(POP_N-len(population))                    # add more
         elif(len(population)>POP_N):                                            # if it has more

@@ -111,7 +111,7 @@ def store_tree(TREE_ROOT, FILE = 'highscores.json'):
     json_dumper(entr_dict, FILE)
     return
 
-def load_raw(FILE = 'paretro.json'):
+def load_raw(FILE = 'pareto.json'):
     """Loads previously calculated scores and simulation values.
 
         Args:
@@ -135,7 +135,7 @@ def load_raw(FILE = 'paretro.json'):
         json_file.close()  
     return highscore_entries
 
-def store_raw(results, FILE = 'paretro.json'):
+def store_raw(results, FILE = 'pareto.json'):
     entr_dict = {}
     for i,ind in enumerate(results):
         entr_dict[i] = {"solution" : ind.vars, "mae" : ind.mae, "area" : ind.area, "time" : ind.time, "power" : ind.power}

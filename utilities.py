@@ -1,16 +1,16 @@
-import base64
-import numpy as np
 import pandas as pd
 from typing import List
-from bitarray import bitarray
 from score_tree import load_raw
-from search import VAR_N, BIT_W, individual, EXACT, UNITS
+from search import EXACT, UNITS
+from individual import individual, VAR_D
+from tcl_helper import create_files, build_rtl
+
 
 def get_dataframe(highscores:List[individual]):
     """Creates a pandas dataframe from an idividual database dictionary.
 
         Args:
-            highscores (dict[name: individual]): idividual database dictionary
+            highscores (list of individuals): idividuals list
 
         Returns:
             dt (DataFrame): generated pandas dataframe
@@ -74,9 +74,29 @@ def worst_case_MAE():
 
     inp_file.close()
     return error
-    
+
+def create_RTL(highscores:List[individual]):
+    """Creates RTL files in the /tcl_work_dir/temp/ directory for every individual in list.
+
+        Args:
+            highscores (list of individuals): idividuals list
+
+        Returns:
+            None
+    """
+    for indiv in highscores: 
+        name = indiv.loaded_id
+        create_files(name)
+        build_rtl(name, [VAR_D[i] for i in indiv.vars]) 
+    return
+
 ############################################## TEST ###############################################
 
 if __name__ == '__main__':
-    describe_dataframe(get_dataframe(load_raw(FILE='pareto-final.json')), 'pareto-final')
-    describe_dataframe(get_dataframe(load_raw(FILE='pareto-optimized.json')), 'pareto-optimized')
+    population1 = load_raw(FILE='pareto-final.json')
+    dataframe1 = get_dataframe(population1)
+    describe_dataframe(get_dataframe(population1), 'pareto-optimized')
+
+    describe_dataframe(get_dataframe(load_raw(FILE='pareto-optimized.json')), 'pareto-final')
+
+    create_RTL(population1)
