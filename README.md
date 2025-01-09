@@ -2,7 +2,7 @@
 
 In this repository we publish the code used to run the Genetic Algorithm experiments for our paper:<br>
 **Design space exploration of partial product reduction stage on 32x32 approximate multipliers**<br>
-Published at [ieeexplore](https://ieeexplore.ieee.org/abstract/document/10615792). Submitted for the 13th International Conference on Modern Circuits and Systems Technologies (MOCAST 2024). (updated: 11/02/2023)
+Published at [ieeexplore](https://ieeexplore.ieee.org/abstract/document/10615792). Submitted for the 13th International Conference on Modern Circuits and Systems Technologies (MOCAST 2024).
 
 Repository Authors:
 - Ioannis Rizos
